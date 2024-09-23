@@ -11,7 +11,7 @@ enum class LemmaKind : uint32_t
 {
   MUL_POW2,      // 1*: (=> (= s 2^i) (= t (bvshl x i)))
   MUL_NEG_POW2,  // 2*: (=> (= s -2^i) (= t (bvshl (bvneg x) i)))
-  MUL_IC,        // 3*: (= (bvand (bvor (bvneg s) s) t) t),
+  MUL_IC,        // 3*: IC: (= (bvand (bvor (bvneg s) s) t) t),
   MUL_ODD,       // 4*: (= t (bvor t (bvand x (bvand s #b0001))))
   MUL_REF1,      //  5: (not (= s (bvnot (bvor t (bvand #b0001 (bvor x s))))))
   MUL_REF3,      //  6: (not (= (bvand x t) (bvor s (bvnot t))))
@@ -77,7 +77,7 @@ enum class LemmaKind : uint32_t
   UREM_REF3,   // 4*: (=> (= s #b0000) (= t x))
   UREM_REF4,   // 5*: (=> (= s x) (= t #b0000))
   UREM_REF5,   // 6*: (=> (bvult x s) (= t x))
-  UREM_REF6,   // 7*: (bvuge (bvnot (bvneg s)) t)
+  UREM_REF6,   // 7*: IC: (bvuge (bvnot (bvneg s)) t)
   UREM_REF7,   //  8: (not (distinct x (bvand x (bvor s (bvor t (bvneg s))))))
   UREM_REF8,   //  9: (not (bvult x (bvor t (bvand x s))))
   UREM_REF9,   // 10: (not (= #b0001 (bvand t (bvnot (bvor x s)))))
@@ -86,6 +86,10 @@ enum class LemmaKind : uint32_t
   UREM_REF12,  // 13: (not (= x (bvor (bvneg x) (bvneg (bvnot t)))))
   UREM_REF13,  // 14: (not (bvult (bvadd x (bvneg s)) t))
   UREM_REF14,  // 15: (not (bvult (bvxor (bvneg s) (bvor x s)) t))
+  UREM_REF15,  // 16*: IC: (bvuge (bvand (bvsub (bvadd t t) x) x) t)
+  UREM_REF16,  // 16*: IC (rewritten):
+               //      (bvuge (bvand (bvadd
+               //      (bvconcat ((_ extract msb-1 0) t) #b1) (bvnot x)) x) t)
   UREM_VALUE,
 
   ADD_ZERO,    // (=> (= s #b000) (= t x))

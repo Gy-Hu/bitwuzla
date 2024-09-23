@@ -115,6 +115,8 @@ operator<<(std::ostream& os, LemmaKind kind)
     case LemmaKind::UREM_REF12: os << "UREM_REF12"; break;
     case LemmaKind::UREM_REF13: os << "UREM_REF13"; break;
     case LemmaKind::UREM_REF14: os << "UREM_REF14"; break;
+    case LemmaKind::UREM_REF15: os << "UREM_REF15"; break;
+    case LemmaKind::UREM_REF16: os << "UREM_REF16"; break;
     case LemmaKind::UREM_VALUE: os << "UREM_VALUE"; break;
 
     case LemmaKind::ADD_ZERO: os << "ADD_ZERO"; break;
@@ -1292,6 +1294,50 @@ Lemma<LemmaKind::UREM_REF14>::instance(const Node& x,
                                     {d_nm.mk_node(Kind::BV_NEG, {s}),
                                      d_nm.mk_node(Kind::BV_OR, {x, s})}),
                        t});
+}
+
+template <>
+Node
+Lemma<LemmaKind::UREM_REF15>::instance(const Node& x,
+                                       const Node& s,
+                                       const Node& t) const
+{
+  // IC: (bvuge (bvand (bvsub (bvadd t t) x) x) t)
+  (void) s;
+  return d_nm.mk_node(
+      Kind::BV_UGE,
+      {d_nm.mk_node(
+           Kind::BV_AND,
+           {d_nm.mk_node(Kind::BV_SUB, {d_nm.mk_node(Kind::BV_ADD, {t, t}), x}),
+            x}),
+       t});
+}
+
+template <>
+Node
+Lemma<LemmaKind::UREM_REF16>::instance(const Node& x,
+                                       const Node& s,
+                                       const Node& t) const
+{
+  // Rewritten form of IC in lemma UREM_REF15:
+  // (bvuge (bvand
+  //   (bvadd (bvconcat ((_ extract msb-1 0) t) #b1) (bvnot x)) x) t)
+  (void) s;
+  uint64_t size = t.type().bv_size();
+  Node concat   = d_nm.mk_value(BitVector::mk_true());
+  if (size > 1)
+  {
+    concat = d_nm.mk_node(
+        Kind::BV_CONCAT,
+        {d_nm.mk_node(Kind::BV_EXTRACT, {t}, {size - 2, 0}), concat});
+  }
+  return d_nm.mk_node(
+      Kind::BV_UGE,
+      {d_nm.mk_node(Kind::BV_AND,
+                    {d_nm.mk_node(Kind::BV_ADD,
+                                  {concat, d_nm.mk_node(Kind::BV_NOT, {x})}),
+                     x}),
+       t});
 }
 
 template <>

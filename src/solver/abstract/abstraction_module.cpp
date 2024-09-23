@@ -127,6 +127,7 @@ AbstractionModule::AbstractionModule(Env& env, SolverState& state)
     urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF4>(nm));
     urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF5>(nm));
     // urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF6>(nm));
+    urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF16>(nm));
     if (!opt_initial_lemmas)
     {
       urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF7>(nm));
@@ -134,6 +135,7 @@ AbstractionModule::AbstractionModule(Env& env, SolverState& state)
       urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF9>(nm));
       urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF10>(nm));
       urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF11>(nm));
+      // UREM_REF12 is subsumed by UREM_REF16
       urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF12>(nm));
       urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF13>(nm));
       urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF14>(nm));
