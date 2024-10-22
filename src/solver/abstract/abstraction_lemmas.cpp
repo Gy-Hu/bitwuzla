@@ -117,6 +117,13 @@ operator<<(std::ostream& os, LemmaKind kind)
     case LemmaKind::UREM_REF14: os << "UREM_REF14"; break;
     case LemmaKind::UREM_REF15: os << "UREM_REF15"; break;
     case LemmaKind::UREM_REF16: os << "UREM_REF16"; break;
+    case LemmaKind::UREM_NEW1: os << "UREM_NEW1"; break;
+    case LemmaKind::UREM_NEW2: os << "UREM_NEW2"; break;
+    case LemmaKind::UREM_NEW3: os << "UREM_NEW3"; break;
+    case LemmaKind::UREM_NEW4: os << "UREM_NEW4"; break;
+    case LemmaKind::UREM_NEW5: os << "UREM_NEW5"; break;
+    case LemmaKind::UREM_NEW6: os << "UREM_NEW6"; break;
+    case LemmaKind::UREM_NEW7: os << "UREM_NEW7"; break;
     case LemmaKind::UREM_VALUE: os << "UREM_VALUE"; break;
 
     case LemmaKind::ADD_ZERO: os << "ADD_ZERO"; break;
@@ -1338,6 +1345,135 @@ Lemma<LemmaKind::UREM_REF16>::instance(const Node& x,
                                   {concat, d_nm.mk_node(Kind::BV_NOT, {x})}),
                      x}),
        t});
+}
+
+template <>
+Node
+Lemma<LemmaKind::UREM_NEW1>::instance(const Node& x,
+                                      const Node& s,
+                                      const Node& t) const
+{
+  // (not (distinct x (bvand x (bvor s (bvor t (bvneg s))))))
+  return d_nm.mk_node(
+      Kind::EQUAL,
+      {x,
+       d_nm.mk_node(
+           Kind::BV_AND,
+           {x,
+            d_nm.mk_node(
+                Kind::BV_OR,
+                {s,
+                 d_nm.mk_node(Kind::BV_OR,
+                              {t, d_nm.mk_node(Kind::BV_NEG, {s})})})})});
+}
+
+template <>
+Node
+Lemma<LemmaKind::UREM_NEW2>::instance(const Node& x,
+                                      const Node& s,
+                                      const Node& t) const
+{
+  // (not (bvult (bvneg s) (bvneg (bvand x (bvnot t)))))
+  return d_nm.mk_node(
+      Kind::NOT,
+      {d_nm.mk_node(
+          Kind::BV_ULT,
+          {d_nm.mk_node(Kind::BV_NEG, {s}),
+           d_nm.mk_node(
+               Kind::BV_NEG,
+               {d_nm.mk_node(Kind::BV_AND,
+                             {x, d_nm.mk_node(Kind::BV_NOT, {t})})})})});
+}
+
+template <>
+Node
+Lemma<LemmaKind::UREM_NEW3>::instance(const Node& x,
+                                      const Node& s,
+                                      const Node& t) const
+{
+  // (not (distinct t (bvand t (bvor x (bvor s (bvneg s))))))
+  return d_nm.mk_node(
+      Kind::EQUAL,
+      {t,
+       d_nm.mk_node(
+           Kind::BV_AND,
+           {t,
+            d_nm.mk_node(
+                Kind::BV_OR,
+                {x,
+                 d_nm.mk_node(Kind::BV_OR,
+                              {s, d_nm.mk_node(Kind::BV_NEG, {s})})})})});
+}
+
+template <>
+Node
+Lemma<LemmaKind::UREM_NEW4>::instance(const Node& x,
+                                      const Node& s,
+                                      const Node& t) const
+{
+  // (not (bvult (bvand x (bvor t (bvneg s))) t))
+  return d_nm.mk_node(
+      Kind::NOT,
+      {d_nm.mk_node(
+          Kind::BV_ULT,
+          {d_nm.mk_node(Kind::BV_AND,
+                        {x,
+                         d_nm.mk_node(Kind::BV_OR,
+                                      {t, d_nm.mk_node(Kind::BV_NEG, {s})})}),
+           t})});
+}
+
+template <>
+Node
+Lemma<LemmaKind::UREM_NEW5>::instance(const Node& x,
+                                      const Node& s,
+                                      const Node& t) const
+{
+  // (not (= x (bvxor t (bvneg (bvnot (bvand x s))))))
+  return d_nm.mk_node(
+      Kind::DISTINCT,
+      {x,
+       d_nm.mk_node(Kind::BV_XOR,
+                    {t,
+                     d_nm.mk_node(Kind::BV_NEG,
+                                  {d_nm.mk_node(Kind::BV_NOT,
+                                                {d_nm.mk_node(Kind::BV_AND,
+                                                              {x, s})})})})});
+}
+
+template <>
+Node
+Lemma<LemmaKind::UREM_NEW6>::instance(const Node& x,
+                                      const Node& s,
+                                      const Node& t) const
+{
+  // (not (bvult x (bvor t (bvand x (bvneg (bvxor x s))))))
+  return d_nm.mk_node(
+      Kind::NOT,
+      {d_nm.mk_node(
+          Kind::BV_ULT,
+          {x,
+           d_nm.mk_node(
+               Kind::BV_OR,
+               {t,
+                d_nm.mk_node(
+                    Kind::BV_AND,
+                    {x,
+                     d_nm.mk_node(Kind::BV_NEG,
+                                  {d_nm.mk_node(Kind::BV_OR, {x, s})})})})})});
+}
+
+template <>
+Node
+Lemma<LemmaKind::UREM_NEW7>::instance(const Node& x,
+                                      const Node& s,
+                                      const Node& t) const
+{
+  // (not (bvult (bvneg s) (bvsub t x)))
+  return d_nm.mk_node(Kind::NOT,
+                      {d_nm.mk_node(Kind::BV_ULT,
+                                    {d_nm.mk_node(Kind::BV_NEG, {s}),
+                                     d_nm.mk_node(Kind::BV_SUB, {t, x})})});
 }
 
 template <>

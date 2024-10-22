@@ -86,10 +86,27 @@ enum class LemmaKind : uint32_t
   UREM_REF12,  // 13: (not (= x (bvor (bvneg x) (bvneg (bvnot t)))))
   UREM_REF13,  // 14: (not (bvult (bvadd x (bvneg s)) t))
   UREM_REF14,  // 15: (not (bvult (bvxor (bvneg s) (bvor x s)) t))
+  // new IC lemma
   UREM_REF15,  // 16*: IC: (bvuge (bvand (bvsub (bvadd t t) x) x) t)
   UREM_REF16,  // 16*: IC (rewritten):
                //      (bvuge (bvand (bvadd
                //      (bvconcat ((_ extract msb-1 0) t) #b1) (bvnot x)) x) t)
+  //// new lemma set
+  // UREM_REF1
+  // UREM_REF2
+  // UREM_REF3
+  // UREM_REF4
+  // UREM_REF5
+  // UREM_REF16
+  UREM_NEW1,  // (not (distinct x (bvand x (bvor s (bvor t (bvneg s))))))
+  UREM_NEW2,  // (not (bvult (bvneg s) (bvneg (bvand x (bvnot t)))))
+  UREM_NEW3,  // (not (distinct t (bvand t (bvor x (bvor s (bvneg s))))))
+  UREM_NEW4,  // (not (bvult (bvand x (bvor t (bvneg s))) t))
+  UREM_NEW5,  // (not (= x (bvxor t (bvneg (bvnot (bvand x s))))))
+  UREM_NEW6,  // (not (bvult x (bvor t (bvand x (bvneg (bvxor x s))))))
+  UREM_NEW7,  // (not (bvult (bvneg s) (bvsub t x)))
+  ////
+
   UREM_VALUE,
 
   ADD_ZERO,    // (=> (= s #b000) (= t x))
