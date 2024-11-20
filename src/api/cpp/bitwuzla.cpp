@@ -107,6 +107,8 @@ static const std::unordered_map<Option, bzla::option::Option>
          bzla::option::Option::ABSTRACTION_BV_UDIV},
         {Option::ABSTRACTION_BV_UREM,
          bzla::option::Option::ABSTRACTION_BV_UREM},
+        {Option::ABSTRACTION_BV_UREM_NEW,
+         bzla::option::Option::ABSTRACTION_BV_UREM_NEW},
         {Option::ABSTRACTION_EQUAL, bzla::option::Option::ABSTRACTION_EQUAL},
         {Option::ABSTRACTION_ITE, bzla::option::Option::ABSTRACTION_ITE},
         {Option::NUM_OPTS, bzla::option::Option::NUM_OPTIONS},

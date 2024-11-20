@@ -415,6 +415,16 @@ enum ENUM(Option)
    *  @warning This is an expert option to configure the prop solver engine.
    */
   EVALUE(ABSTRACTION_BV_UREM),
+  /*! **Abstraction module: Use new lemma set for abstracting bit-vector
+   * unsigned remainder terms. **
+   *
+   * Values:
+   *  * **1**: enable
+   *  * **0**: disable [**default**]
+   *
+   *  @warning This is an expert option to configure the prop solver engine.
+   */
+  EVALUE(ABSTRACTION_BV_UREM_NEW),
   /*! **Abstraction module: Abstract equality terms. **
    *
    * Values:

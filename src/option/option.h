@@ -63,6 +63,7 @@ enum class Option
   ABSTRACTION_BV_MUL,          // bool
   ABSTRACTION_BV_UDIV,         // bool
   ABSTRACTION_BV_UREM,         // bool
+  ABSTRACTION_BV_UREM_NEW,     // bool
   ABSTRACTION_EQUAL,           // bool
   ABSTRACTION_ITE,             // bool
 
@@ -504,6 +505,7 @@ class Options
   OptionBool abstraction_bv_mul;
   OptionBool abstraction_bv_udiv;
   OptionBool abstraction_bv_urem;
+  OptionBool abstraction_bv_urem_new;
   OptionBool abstraction_eq;
   OptionBool abstraction_ite;
 

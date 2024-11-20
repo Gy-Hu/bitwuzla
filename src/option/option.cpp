@@ -336,6 +336,11 @@ Options::Options()
                           true,
                           "term abstraction for bvurem",
                           "abstraction-bvurem"),
+      abstraction_bv_urem_new(this,
+                              Option::ABSTRACTION_BV_UREM_NEW,
+                              false,
+                              "use new lemma set for abstracting bvurem",
+                              "abstraction-bvurem-new"),
       abstraction_eq(this,
                      Option::ABSTRACTION_EQUAL,
                      false,
@@ -733,6 +738,7 @@ Options::data(Option opt)
     case Option::ABSTRACTION_BV_MUL: return &abstraction_bv_mul;
     case Option::ABSTRACTION_BV_UDIV: return &abstraction_bv_udiv;
     case Option::ABSTRACTION_BV_UREM: return &abstraction_bv_urem;
+    case Option::ABSTRACTION_BV_UREM_NEW: return &abstraction_bv_urem_new;
     case Option::ABSTRACTION_EQUAL: return &abstraction_eq;
     case Option::ABSTRACTION_ITE: return &abstraction_ite;
 

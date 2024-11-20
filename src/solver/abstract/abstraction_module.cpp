@@ -21,8 +21,6 @@ using namespace node;
 
 /* --- AbstractionModule public --------------------------------------------- */
 
-#define BV_UREM_USE_NEW_LEMMA_SET
-
 AbstractionModule::AbstractionModule(Env& env, SolverState& state)
     : d_env(env),
       d_logger(env.logger()),
@@ -124,36 +122,39 @@ AbstractionModule::AbstractionModule(Env& env, SolverState& state)
     auto& urem_abstr_lemmas = d_abstr_lemmas[Kind::BV_UREM];
 
     urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_POW2>(nm));
+    // new IC lemma
+    urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF16>(nm));
     urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF1>(nm));
     urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF2>(nm));
     urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF3>(nm));
     urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF4>(nm));
     urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF5>(nm));
     // urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF6>(nm));
-#ifdef BV_UREM_USE_NEW_LEMMA_SET  // new IC lemma
-    urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF16>(nm));
-#endif
     if (!opt_initial_lemmas)
     {
-#ifdef BV_UREM_USE_NEW_LEMMA_SET  // new lemma set
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW1>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW2>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW3>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW4>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW5>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW6>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW7>(nm));
-#else
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF7>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF8>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF9>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF10>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF11>(nm));
-      // UREM_REF12 is subsumed by UREM_REF16
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF12>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF13>(nm));
-      urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF14>(nm));
-#endif
+      if (env.options().abstraction_bv_urem_new())
+      {
+        // new lemma set
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW1>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW2>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW3>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW4>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW5>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW6>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_NEW7>(nm));
+      }
+      else
+      {
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF7>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF8>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF9>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF10>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF11>(nm));
+        // UREM_REF12 is subsumed by UREM_REF16
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF12>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF13>(nm));
+        urem_abstr_lemmas.emplace_back(new Lemma<LemmaKind::UREM_REF14>(nm));
+      }
     }
   }
 
