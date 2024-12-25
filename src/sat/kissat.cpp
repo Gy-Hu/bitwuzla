@@ -52,9 +52,7 @@ Kissat::add(int32_t lit)
 void
 Kissat::assume(int32_t lit)
 {
-  (void) lit;
-  assert(false);
-  throw Error("Incremental solving not supported in Kissat");
+  kissat_assume(d_solver, lit);
 }
 
 int32_t
@@ -69,10 +67,7 @@ Kissat::value(int32_t lit)
 bool
 Kissat::failed(int32_t lit)
 {
-  (void) lit;
-  assert(false);
-  throw Error("Incremental solving not supported in Kissat");
-  return false;
+  return kissat_failed(d_solver, lit);
 }
 
 int32_t
