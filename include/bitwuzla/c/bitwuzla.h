@@ -1337,6 +1337,31 @@ const BitwuzlaTerm *bitwuzla_get_unsat_assumptions(Bitwuzla *bitwuzla,
 const BitwuzlaTerm *bitwuzla_get_unsat_core(Bitwuzla *bitwuzla, size_t *size);
 
 /**
+ * Get all unsat cores.
+ *
+ * Requires that the last `bitwuzla_check_sat()` query returned
+ * `::BITWUZLA_UNSAT` and unsat cores are enabled.
+ *
+ * @param bitwuzla The Bitwuzla instance.
+ * @param size Output parameter, stores the number of unsat cores found.
+ * @param cores Output parameter, stores the array of unsat cores. Each core is
+ *              an array of terms, and the size of each core is stored in the
+ *              corresponding element of `core_sizes`.
+ * @param core_sizes Output parameter, stores the size of each unsat core.
+ *
+ * @note The returned arrays are only valid until the next call to this function.
+ *
+ * @see
+ *   * `bitwuzla_assert`
+ *   * `bitwuzla_check_sat`
+ *   * `bitwuzla_get_unsat_core`
+ */
+void bitwuzla_enumerate_unsat_cores(Bitwuzla *bitwuzla,
+                                  size_t *size,
+                                  const BitwuzlaTerm **cores[],
+                                  size_t *core_sizes[]);
+
+/**
  * Simplify the current input formula.
  *
  * @param bitwuzla The Bitwuzla instance.

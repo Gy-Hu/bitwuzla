@@ -498,6 +498,81 @@ bitwuzla_get_unsat_core(Bitwuzla *bitwuzla, size_t *size)
 }
 
 void
+bitwuzla_enumerate_unsat_cores(Bitwuzla *bitwuzla,
+                              size_t *size,
+                              const BitwuzlaTerm **cores[],
+                              size_t *core_sizes[])
+{
+  static thread_local std::vector<std::vector<BitwuzlaTerm>> all_cores;
+  static thread_local std::vector<const BitwuzlaTerm*> core_ptrs;
+  static thread_local std::vector<size_t> sizes;
+
+  BITWUZLA_TRY_CATCH_BEGIN;
+  BITWUZLA_CHECK_NOT_NULL(bitwuzla);
+  BITWUZLA_CHECK_NOT_NULL(size);
+  BITWUZLA_CHECK_NOT_NULL(cores);
+  BITWUZLA_CHECK_NOT_NULL(core_sizes);
+
+  all_cores.clear();
+  core_ptrs.clear();
+  sizes.clear();
+
+  std::vector<std::vector<bitwuzla::Term>> cpp_cores;
+  bitwuzla->d_bitwuzla->enumerate_unsat_cores(cpp_cores);
+
+  auto tm = bitwuzla->d_tm;
+  for (const auto& core : cpp_cores)
+  {
+    all_cores.emplace_back();
+    for (const auto& term : core)
+    {
+      all_cores.back().push_back(tm->export_term(term));
+    }
+    core_ptrs.push_back(all_cores.back().data());
+    sizes.push_back(all_cores.back().size());
+  }
+
+  *size = all_cores.size();
+  *cores = core_ptrs.data();
+  *core_sizes = sizes.data();
+
+  BITWUZLA_TRY_CATCH_END;
+}
+
+void
+bitwuzla_print_multiple_unsat_cores(Bitwuzla *bitwuzla,
+                                   const char *format,
+                                   FILE *file,
+                                   uint8_t base)
+{
+  BITWUZLA_TRY_CATCH_BEGIN;
+  BITWUZLA_CHECK_NOT_NULL(bitwuzla);
+  BITWUZLA_CHECK_NOT_NULL(format);
+  BITWUZLA_CHECK_NOT_NULL(file);
+  std::stringstream ss;
+  ss << bitwuzla::set_bv_format(base);
+  
+  size_t size;
+  const BitwuzlaTerm **cores;
+  size_t *core_sizes;
+  bitwuzla_enumerate_unsat_cores(bitwuzla, &size, &cores, &core_sizes);
+  
+  for (size_t i = 0; i < size; ++i)
+  {
+    fprintf(file, ";; Unsat Core #%zu\n", i + 1);
+    std::vector<bitwuzla::Term> core;
+    for (size_t j = 0; j < core_sizes[i]; ++j)
+    {
+      core.push_back(BitwuzlaTermManager::import_term(cores[i][j]));
+    }
+    bitwuzla->d_bitwuzla->print_formula(ss, format);
+    fprintf(file, "%s\n", ss.str().c_str());
+    ss.str("");
+  }
+  BITWUZLA_TRY_CATCH_END;
+}
+
+void
 bitwuzla_simplify(Bitwuzla *bitwuzla)
 {
   BITWUZLA_TRY_CATCH_BEGIN;

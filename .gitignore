@@ -6,3 +6,8 @@ build/
 subprojects/*
 !/subprojects/packagefiles
 !subprojects/*.wrap
+.aider*
+smt2/
+.cache/
+.vscode
+

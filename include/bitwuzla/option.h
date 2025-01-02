@@ -75,6 +75,15 @@ enum ENUM(Option)
    *  * **0**: disable [**default**]
    */
   EVALUE(PRODUCE_UNSAT_CORES),
+  /*! **Multiple unsat cores generation.**
+   *
+   * Values:
+   *  * **1**: enable
+   *  * **0**: disable [**default**]
+   *
+   * @note This option requires PRODUCE_UNSAT_CORES to be enabled.
+   */
+  EVALUE(PRODUCE_MULTIPLE_UNSAT_CORES),
   /*! **Seed for random number generator.**
    *
    * Values:

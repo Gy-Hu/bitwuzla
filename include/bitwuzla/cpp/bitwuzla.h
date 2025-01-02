@@ -1634,6 +1634,21 @@ class Bitwuzla
   std::vector<Term> get_unsat_core();
 
   /**
+   * Enumerate all unsat cores.
+   *
+   * Requires that the last `check_sat()` query returned `Result::UNSAT` and
+   * unsat cores are enabled.
+   *
+   * @param cores A vector to store all found unsat cores.
+   *
+   * @see
+   *   * `Options::set()`
+   *   * `check_sat()`
+   *   * `get_unsat_core()`
+   */
+  void enumerate_unsat_cores(std::vector<std::vector<Term>>& cores);
+
+  /**
    * Simplify the current input formula.
    *
    * @note Each call to `Bitwuzla::check_sat()` simplifies the input formula as

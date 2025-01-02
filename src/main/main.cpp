@@ -37,6 +37,10 @@ main(int32_t argc, char* argv[])
     if (main_options.print_unsat_core)
     {
       options.set(bitwuzla::Option::PRODUCE_UNSAT_CORES, 1);
+      if (main_options.print_multiple_unsat_cores)
+      {
+        options.set(bitwuzla::Option::PRODUCE_MULTIPLE_UNSAT_CORES, 1);
+      }
     }
     if (main_options.print_model)
     {
@@ -69,7 +73,24 @@ main(int32_t argc, char* argv[])
 
     if (main_options.print_unsat_core)
     {
-      bitwuzla->print_unsat_core(std::cout);
+      if (main_options.print_multiple_unsat_cores)
+      {
+        std::vector<std::vector<bitwuzla::Term>> cores;
+        bitwuzla->enumerate_unsat_cores(cores);
+        for (size_t i = 0; i < cores.size(); ++i)
+        {
+          std::cout << ";; Unsat Core #" << (i + 1) << "\n(and";
+          for (const auto& term : cores[i])
+          {
+            std::cout << "\n  " << term;
+          }
+          std::cout << ")\n\n";
+        }
+      }
+      else
+      {
+        bitwuzla->print_unsat_core(std::cout);
+      }
     }
 
     if (options.get(bitwuzla::Option::VERBOSITY))

@@ -25,6 +25,7 @@
 #include "solver/fp/floating_point.h"
 #include "solver/fp/rounding_mode.h"
 #include "solver/fp/symfpu_nm.h"  // Temporary for setting SymFpuNM
+#include "solver/multiple_cores.h"
 #include "solver/result.h"
 #include "solving_context.h"
 #include "terminator.h"
@@ -64,6 +65,8 @@ static const std::unordered_map<Option, bzla::option::Option>
          bzla::option::Option::PRODUCE_UNSAT_ASSUMPTIONS},
         {Option::PRODUCE_UNSAT_CORES,
          bzla::option::Option::PRODUCE_UNSAT_CORES},
+        {Option::PRODUCE_MULTIPLE_UNSAT_CORES,
+         bzla::option::Option::PRODUCE_MULTIPLE_UNSAT_CORES},
         {Option::SAT_SOLVER, bzla::option::Option::SAT_SOLVER},
         {Option::SEED, bzla::option::Option::SEED},
         {Option::VERBOSITY, bzla::option::Option::VERBOSITY},
@@ -1512,6 +1515,26 @@ Bitwuzla::get_unsat_core()
     d_uc_is_valid = true;
   }
   return d_unsat_core;
+}
+
+void
+Bitwuzla::enumerate_unsat_cores(std::vector<std::vector<Term>>& cores)
+{
+  BITWUZLA_CHECK_NOT_NULL(d_ctx);
+  BITWUZLA_CHECK_OPT_PRODUCE_UNSAT_CORES(d_ctx->options());
+  BITWUZLA_CHECK_LAST_CALL_UNSAT("enumerate unsat cores");
+
+  bzla::MultipleUnsatCores enumerator(*d_ctx);
+  
+  while (true)
+  {
+    std::vector<bzla::Node> core = enumerator.get_next_core();
+    if (core.empty())
+    {
+      break;
+    }
+    cores.push_back(Term::node_vector_to_terms(core));
+  }
 }
 
 void

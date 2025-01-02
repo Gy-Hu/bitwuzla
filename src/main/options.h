@@ -19,10 +19,11 @@ namespace bzla::main {
 
 struct Options
 {
-  bool print              = false;
-  bool print_unsat_core   = false;
-  bool print_model        = false;
-  bool print_no_letify    = false;
+  bool print                      = false;
+  bool print_unsat_core           = false;
+  bool print_multiple_unsat_cores = false;
+  bool print_model                = false;
+  bool print_no_letify            = false;
   bool parse_only         = false;
   bool pp_only            = false;
   uint8_t bv_format       = 2;

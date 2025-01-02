@@ -22,11 +22,12 @@ namespace bzla::option {
 
 enum class Option
 {
-  LOG_LEVEL,                  // numeric
-  PRODUCE_MODELS,             // bool
-  PRODUCE_UNSAT_ASSUMPTIONS,  // bool
-  PRODUCE_UNSAT_CORES,        // bool
-  SEED,                       // numeric
+  LOG_LEVEL,                        // numeric
+  PRODUCE_MODELS,                   // bool
+  PRODUCE_UNSAT_ASSUMPTIONS,        // bool
+  PRODUCE_UNSAT_CORES,             // bool
+  PRODUCE_MULTIPLE_UNSAT_CORES,    // bool
+  SEED,                            // numeric
   VERBOSITY,                  // numeric
   TIME_LIMIT_PER,             // numeric
   MEMORY_LIMIT,               // numeric
@@ -468,6 +469,7 @@ class Options
   OptionBool produce_models;
   OptionBool produce_unsat_assumptions;
   OptionBool produce_unsat_cores;
+  OptionBool produce_multiple_unsat_cores;
   OptionNumeric seed;
   OptionNumeric verbosity;
   OptionNumeric time_limit_per;

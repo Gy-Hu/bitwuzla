@@ -144,6 +144,10 @@ print_help()
                     format_longb("print-unsat-core"),
                     "",
                     "print unsat core in smt2 format");
+  opts.emplace_back("",
+                    format_longb("print-multiple-unsat-cores"),
+                    "",
+                    "print all unsat cores in smt2 format");
   opts.emplace_back(
       "", format_longb("print-model"), "", "print model in smt2 format");
   opts.emplace_back("",
@@ -373,6 +377,11 @@ parse_options(int32_t argc, char* argv[], std::vector<std::string>& args)
     else if (arg == "--print-unsat-core")
     {
       opts.print_unsat_core = true;
+    }
+    else if (arg == "--print-multiple-unsat-cores")
+    {
+      opts.print_multiple_unsat_cores = true;
+      opts.print_unsat_core = true;  // Multiple cores requires unsat core to be enabled
     }
     else if (arg == "--print-model")
     {

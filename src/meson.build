@@ -218,6 +218,7 @@ sources = files([
   'solver/solver.cpp',
   'solver/solver_engine.cpp',
   'solver/solver_state.cpp',
+  'solver/multiple_cores.cpp',
   'solving_context.cpp',
   'type/type.cpp',
   'type/type_data.cpp',

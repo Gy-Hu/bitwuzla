@@ -124,6 +124,11 @@ Options::Options()
                           false,
                           "unsat core production",
                           "produce-unsat-cores"),
+      produce_multiple_unsat_cores(this,
+                                  Option::PRODUCE_MULTIPLE_UNSAT_CORES,
+                                  false,
+                                  "multiple unsat cores production",
+                                  "produce-multiple-unsat-cores"),
       seed(this,
            Option::SEED,
            27644437,
@@ -686,6 +691,11 @@ Options::finalize()
     // enable unsat cores when enabling unsat assumptions
     produce_unsat_cores.set(true);
   }
+  if (produce_multiple_unsat_cores())
+  {
+    // we must enable unsat cores when enabling multiple unsat cores
+    produce_unsat_cores.set(true);
+  }
   // configure default values for number of propagations and updates in case
   // of sequential portfolio bv solver configuration PREPROP
   if (bv_solver() == BvSolver::PREPROP)
@@ -726,6 +736,7 @@ Options::data(Option opt)
     case Option::PRODUCE_MODELS: return &produce_models;
     case Option::PRODUCE_UNSAT_ASSUMPTIONS: return &produce_unsat_assumptions;
     case Option::PRODUCE_UNSAT_CORES: return &produce_unsat_cores;
+    case Option::PRODUCE_MULTIPLE_UNSAT_CORES: return &produce_multiple_unsat_cores;
     case Option::SAT_SOLVER: return &sat_solver;
     case Option::SEED: return &seed;
     case Option::VERBOSITY: return &verbosity;
