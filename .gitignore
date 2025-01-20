@@ -10,3 +10,4 @@ subprojects/*
 .aider*
 .cache*
 smt2/
+subprojects/kissat-rel-4.0.1/

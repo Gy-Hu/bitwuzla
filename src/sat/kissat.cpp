@@ -39,6 +39,9 @@ Kissat::Kissat()
 {
   d_solver = kissat_init();
   kissat_set_option(d_solver, "quiet", 1);
+#ifdef BZLA_USE_KISSAT_UNSAT
+  kissat_set_configuration(d_solver, "unsat");
+#endif
 }
 
 Kissat::~Kissat() { kissat_release(d_solver); }

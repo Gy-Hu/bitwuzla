@@ -49,6 +49,9 @@ if cms_dep.found()
 endif
 if kissat_dep.found()
   cpp_args += ['-DBZLA_USE_KISSAT']
+  if get_option('kissat_unsat')
+    cpp_args += ['-DBZLA_USE_KISSAT_UNSAT']
+  endif
 endif
 
 # ---

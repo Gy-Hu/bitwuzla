@@ -32,6 +32,33 @@ Bitwuzla can be built on Linux and macOS. Windows support is planned and WIP.
 For detailed build and installation instructions
 see [docs/install.rst](docs/install.rst).
 
+## Kissat UNSAT Mode Support
+
+Bitwuzla supports using Kissat in UNSAT mode, which is optimized for solving unsatisfiable instances. To enable this feature:
+
+1. First, apply the Kissat UNSAT mode patch (optional):
+   ```bash
+   ./scripts/apply_kissat_patch.sh
+   ```
+
+2. Configure the build with Kissat UNSAT mode:
+   ```bash
+   meson setup build -Dkissat=true -Dkissat_unsat=true
+   ```
+   
+   If you want to apply the patch during configuration:
+   ```bash
+   meson setup build -Dkissat=true -Dkissat_unsat=true -Dapply_kissat_patch=true
+   ```
+
+3. Build the project:
+   ```bash
+   cd build
+   ninja
+   ```
+
+The Kissat UNSAT mode sets `--stable=0`, which is optimized for proving unsatisfiability. This configuration is particularly effective when dealing with unsatisfiable formulas.
+
 ## Citing Bitwuzla
 
 A [comprehensive system description](https://bitwuzla.github.io/data/NiemetzP-CAV23.pdf)

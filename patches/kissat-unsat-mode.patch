@@ -1,0 +1,13 @@
+diff --git a/subprojects/kissat-rel-4.0.1/src/config.c b/subprojects/kissat-rel-4.0.1/src/config.c
+--- a/subprojects/kissat-rel-4.0.1/src/config.c
++++ b/subprojects/kissat-rel-4.0.1/src/config.c
+@@ -74,6 +74,11 @@ int kissat_set_configuration (kissat *solver, const char *name) {
+     kissat_set_option (solver, "restartint", RESTARTINT_SAT);
+     return 1;
+   }
++  if (!strcmp (name, "unsat")) {
++    kissat_set_option (solver, "stable", 0);
++    return 1;
++  }
+   return 0;
+ }
