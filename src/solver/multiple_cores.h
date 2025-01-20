@@ -32,9 +32,11 @@ class MultipleUnsatCores
   SolvingContext& d_ctx;
   /** Store found cores */
   std::vector<std::vector<Node>> d_found_cores;
+  /** Flag to indicate if the solver has been initialized */
+  bool d_initialized = false;
 
-  /** Block previously found cores */
-  void block_previous_cores();
+  /** Block previously found core */
+  void block_previous_core();
 };
 
 }  // namespace bzla
