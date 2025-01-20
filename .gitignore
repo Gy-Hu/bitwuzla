@@ -6,3 +6,7 @@ build/
 subprojects/*
 !/subprojects/packagefiles
 !subprojects/*.wrap
+.aider.chat.history.md
+.aider*
+.cache*
+smt2/
